@@ -1,0 +1,28 @@
+.flex-container {
+    display: flex;
+      background-color: #333;
+    }
+    
+    .flex-container > div {
+      background-color:#333;
+   
+      padding: 10px;
+      font-size: 30px;
+      color: white;
+    }
+    .icon{
+      color: white;
+      font-size: 30px;
+      width: 60px ;
+      
+    }
+    .menu{
+      width: 200px ;
+      background-color:rgb(238, 234, 234);
+      margin: 0%;
+      padding: 0%;
+      
+      
+  
+    }
+    
