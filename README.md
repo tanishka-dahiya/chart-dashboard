@@ -14,6 +14,8 @@ also validation of entry is also there.
 npm start
 ```
 
+deployed on: https://dashbardchart.herokuapp.com/
+
 
 
 
