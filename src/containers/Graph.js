@@ -1,16 +1,16 @@
 import React ,{Component} from 'react';
-import { Doughnut } from 'react-chartjs-2';
-import { Bar } from 'react-chartjs-2';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-//import ChipInput from 'material-ui-chip-input';
+import ChipInput from 'material-ui-chip-input'
 import { creatTodoActions,getTasks} from '../components/tododucks';
 import {constants} from '../constants';
-import {
-  Card,CardHeader,CardBody,CardFooter,Alert
-} from "reactstrap";
 import './Graph.css';
-
+import CanvasJSReact from "./canvasjs.react";
+import {
+Alert
+} from "reactstrap";
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+var chart;
 export class PieChart extends Component {
   constructor(props) 
   {
@@ -25,8 +25,9 @@ export class PieChart extends Component {
   getLablels= (task) =>{
     const labels = [];
     task.elements.forEach((element,index) => {
-      labels.push(`${constants.value}${index+1}`)
+      labels.push({ label: `${constants.value}${index+1}`,  y: Number(element)  });
     });
+    console.log(labels);
     return labels;
   };
   
@@ -41,7 +42,7 @@ export class PieChart extends Component {
 
 //check for adding chips 
   handleChips=(chips,index)=>{
-     const re = /^[0-9\b]+$/;
+    const re = /^[0-9\b]+$/;
     const result = chips.some(function(arrVal) {
     return !re.test(arrVal);
      });
@@ -54,67 +55,51 @@ export class PieChart extends Component {
       }
   }
 
-  render(){ 
-   const data = this.props.IsTasks;
-      return(<>
-         <Alert color="info"  isOpen={this.state.showError} toggle={(e) => this.setState({showError: false})} >
+   render(){ 
+    const data = this.props.IsTasks;
+   return(<>
+    <Alert color="info"  isOpen={this.state.showError} toggle={(e) => this.setState({showError: false})} >
          Please Enter Numbers Only
          </Alert>
-          {data.map((task, index) => {
-            if(task.type === constants.pie) {
-              const data = {
-              labels: this.getLablels(task),
-              datasets: [{
-              data:task.elements,
-              backgroundColor: this.getBGColor(task),
-              }]
-              };
-              return (<div className='cardClass'> 
-                <Card >
-                <CardHeader tag="h3">
-                  Pie Chart
-                 </CardHeader>
-                  <CardBody>
-                   <Doughnut data={data}height={50} /> 
-                    </CardBody>
-                     <CardBody>
-                   {/* <ChipInput
-                   defaultValue={task.elements}
-                   onChange={(chips) => this.handleChips(chips,index)}/> */}
-                    </CardBody> <CardFooter className="text-muted">
-                   </CardFooter>
-                </Card></div>
-              )
+       {  data.map((task, index) => {
+          const options = {
+            theme: "light2", // "light1", "dark1", "dark2"
+            animationEnabled: true, //Change to false
+            animationDuration: 1200, //Change it to 2000		
+            title:{
+              text: task.type === constants.pie? "Pie Chart":"Bar Graph"
+            },
+            data: [
+            {
+              //Change type to "line", "bar", "area", "pie", etc.
+              type: task.type === constants.pie?"pie": "column",
+              dataPoints: this.getLablels(task)
             }
-            else{
-               const data = {
-                labels: this.getLablels(task),
-                datasets: [{
-                label: constants.value,
-                data: task.elements,
-                backgroundColor:this.getBGColor(task),
-                borderWidth: 1
-                }]
-                };
-              return ( <div className='cardClass'><Card>
-                <CardHeader tag="h3">
-                 Bar Graph
-                 </CardHeader>
-                  <CardBody>
-                 <Bar data={data}  height = {90} /> 
-                  </CardBody>
-                   <CardBody>
-                 {/* <ChipInput
-                 defaultValue={task.elements}
-                 onChange={(chips) => this.handleChips(chips,index)} /> */}
-                 </CardBody> <CardFooter className="text-muted">
-    </CardFooter> </Card>
-    </div>)
-            }
-      })
-    }
- </>
-  );
+            ]
+          },
+          
+          //Styling Chart Container
+          containerProps = {
+            width: "100%",
+            height: "300px",
+            border: "1px solid black"
+          };
+        
+           return ( <div className='cardClass'>
+               <CanvasJSChart
+          options={options}
+          onRef={ref => (chart = ref)} //Reference to the chart-instance
+          containerProps={containerProps}
+        />
+     <ChipInput
+  defaultValue={task.elements}
+  onChange={(chips) => this.handleChips(chips,index)}
+/>
+               </div>)
+         }
+   )}
+</>
+);
 }
 }
   export default compose(
