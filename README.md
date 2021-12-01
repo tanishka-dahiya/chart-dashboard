@@ -7,6 +7,7 @@ npm i
 ```
 ## Usage
 This Project uses reactjs,react-icons,redux, reactstrap and Canvasjs,bootstrap,redux-saga,axios.
+also validation of entry is also there.
 ## Start
 
 ```bash
