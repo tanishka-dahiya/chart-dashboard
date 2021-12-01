@@ -2,8 +2,6 @@
   "name": "charts",
   "version": "0.1.0",
   "private": true,
-  "node": "16.6.2",
- "npm": "6.11.2",
  "engines": { 
   "node": "16.6.2" 
 } ,
